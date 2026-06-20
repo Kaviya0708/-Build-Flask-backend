@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Management System</title>
+
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:25px;
+    border-radius:15px;
+}
+
+h1{
+    text-align:center;
+    color:#667eea;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:8px;
+}
+
+button{
+    background:#667eea;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.product{
+    background:#f4f4f4;
+    padding:15px;
+    margin-top:10px;
+    border-radius:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.delete{
+    background:red;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h1>🛒 Product Management</h1>
+
+<input type="text" id="name" placeholder="Product Name">
+
+<input type="number" id="price" placeholder="Price">
+
+<button onclick="addProduct()">
+Add Product
+</button>
+
+<div id="productList"></div>
+
+</div>
+
+<script>
+let products =
+JSON.parse(localStorage.getItem("products")) || [];
+
+function saveProducts(){
+    localStorage.setItem(
+        "products",
+        JSON.stringify(products)
+    );
+}
+
+function displayProducts(){
+
+    const list =
+    document.getElementById("productList");
+
+    list.innerHTML = "";
+
+    products.forEach((product,index)=>{
+
+        list.innerHTML += `
+        <div class="product">
+            <div>
+                <strong>${product.name}</strong>
+                <br>
+                ₹${product.price}
+            </div>
+
+            <button class="delete"
+            onclick="deleteProduct(${index})">
+            Delete
+            </button>
+        </div>
+        `;
+    });
+}
+
+function addProduct(){
+
+    const name =
+    document.getElementById("name").value;
+
+    const price =
+    document.getElementById("price").value;
+
+    if(name==="" || price===""){
+        alert("Fill all fields");
+        return;
+    }
+
+    products.push({
+        name:name,
+        price:price
+    });
+
+    saveProducts();
+    displayProducts();
+
+    document.getElementById("name").value="";
+    document.getElementById("price").value="";
+}
+
+function deleteProduct(index){
+    products.splice(index,1);
+    saveProducts();
+    displayProducts();
+}
+
+displayProducts();
+</script>
+
+</body>
+</html>
